@@ -36,4 +36,7 @@
          increase the rate of unintentional unlocks. -->
     <bool name="config_lockscreenAntiFalsingClassifierEnabled">false</bool>
 
+    <!-- Pad content in navbar for rounded corners -->
+    <dimen name="rounded_corner_content_padding">8dp</dimen>
+
 </resources>
