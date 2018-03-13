@@ -2,5 +2,6 @@
 /system          ext4              /dev/block/bootdevice/by-name/system     flags=slotselect
 /system_image    emmc              /dev/block/bootdevice/by-name/system     flags=slotselect
 /data            ext4              /dev/block/bootdevice/by-name/userdata
+/misc            emmc              /dev/block/bootdevice/by-name/misc
 
-#/usb-otg         vfat              /dev/block/sdg1      /dev/block/sdg              flags=removable;storage;display=USB-OTG
+/usb-otg         vfat              /dev/block/sdg1      /dev/block/sdg              flags=removable;storage;display=USB-OTG
