@@ -10,17 +10,22 @@ on fs
     chown system system /dev/ion
     setprop ro.hardware.bootctrl msm8998
     install_keyring
+    start adbd
+    start servicemanager
+    start keymaster-3-0
+    start gatekeeper-1-0
 
+on early-boot
     # Touch
     chmod 0666 /sys/kernel/boot_adsp/boot
     chmod 0666 /sys/kernel/boot_slpi/boot
     write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/boot_slpi/boot 1
+    mkdir /hbtp 0777
+    start hwservicemanager
     start sbinadsprpcd
     start hbtp
-    start adbd
 
-on boot
     start sbinqseecomd
 
 service sbinqseecomd /sbin/qseecomd
@@ -36,8 +41,54 @@ service sbinadsprpcd /sbin/adsprpcd
     disabled
     seclabel u:r:recovery:s0
 
-service hbtp /sbin/hbtp_daemon
+service hbtp /sbin/hbtp.sh
     user root
     group root
     disabled
+    seclabel u:r:recovery:s0
+
+service hwservicemanager /sbin/hwservicemanager
+    user root
+    group root
+    disabled
+    onrestart setprop hwservicemanager.ready false
+    seclabel u:r:recovery:s0
+
+service servicemanager /sbin/servicemanager
+    disabled
+    user root
+    group root readproc
+    seclabel u:r:recovery:s0
+    writepid /dev/cpuset/system-background/tasks
+
+service keymaster-3-0 /sbin/keymaster-3-0.sh
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0 /sbin/android.hardware.gatekeeper@1.0-service
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service boot-1-0 /sbin/android.hardware.boot@1.0-service
+    user root
+    group root
+    seclabel u:r:recovery:s0
+
+# keystore is started and stopped on demand by TWRP
+service keystore /sbin/keystore /tmp/misc/keystore
+    disabled
+    user root
+    group root drmrpc readproc
+    seclabel u:r:recovery:s0
+    writepid /dev/cpuset/foreground/tasks
+
+service keystore_auth /sbin/keystore_auth
+    disabled
+    oneshot
+    user system
+    group root
     seclabel u:r:recovery:s0

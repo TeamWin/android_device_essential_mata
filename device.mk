@@ -444,3 +444,7 @@ PRODUCT_PACKAGES += \
     wificond \
     wpa_supplicant \
     wpa_supplicant.conf
+
+PRODUCT_COPY_FILES += \
+    device/essential/mata/twrp/twrp.fstab:recovery/root/etc/twrp.fstab \
+    device/essential/mata/kernel:kernel
